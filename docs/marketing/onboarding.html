@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="See how LedgerLocal works — invoicing, bank import, reports, and more. A guided tour of offline desktop accounting." />
+  <title>Product Tour — LedgerLocal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="onboarding-page">
+  <header class="site-header" id="header">
+    <div class="container">
+      <nav class="nav" id="nav">
+        <a href="index.html" class="logo" aria-label="LedgerLocal home">
+          <span class="logo-mark" aria-hidden="true">LL</span>
+          LedgerLocal
+        </a>
+        <ul class="nav-links">
+          <li><a href="onboarding.html" class="nav-active">Product tour</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="index.html#pricing">Pricing</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+        </ul>
+        <div class="nav-cta">
+          <a href="index.html#notify" class="btn btn-primary">Coming soon</a>
+        </div>
+        <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="tour-hero">
+      <div class="container">
+        <p class="coming-soon-label" style="color: var(--accent);">Product tour</p>
+        <h1>See how LedgerLocal works</h1>
+        <p class="tour-hero-lead">
+          Walk through the core workflows — from your first company file to year-end reports.
+          Everything runs on your machine. No cloud account required.
+        </p>
+        <nav class="tour-jump" aria-label="Tour sections">
+          <a href="#setup">Setup</a>
+          <a href="#invoicing">Invoicing</a>
+          <a href="#banking">Banking</a>
+          <a href="#payables">Payables</a>
+          <a href="#reports">Reports</a>
+          <a href="#backup">Backup</a>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Step 1: Setup -->
+    <section class="tour-step" id="setup">
+      <div class="container tour-step-grid">
+        <div class="tour-step-content">
+          <span class="tour-step-num">01</span>
+          <h2>Create your company in minutes</h2>
+          <p>Open LedgerLocal and create a <code>.ledger</code> file for your business. You get a ready-made chart of accounts — bank, AR, AP, income, and expense categories — so you can start bookkeeping the same day.</p>
+          <ul class="tour-bullets">
+            <li>One file per company; open multiple businesses from one app</li>
+            <li>Customize accounts or add bank accounts anytime</li>
+            <li>Set default tax rate and invoice payment terms in Settings</li>
+            <li>Upload a company logo for invoice PDFs</li>
+          </ul>
+        </div>
+        <div class="tour-mock" aria-hidden="true">
+          <div class="mock-panel">
+            <div class="mock-panel-header">Welcome to LedgerLocal</div>
+            <div class="mock-welcome-card">
+              <p class="mock-label">Create new company</p>
+              <div class="mock-input">My Business LLC</div>
+              <div class="mock-btn">Create Company</div>
+            </div>
+            <div class="mock-divider">or</div>
+            <div class="mock-btn mock-btn-outline">Open Company File</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2: Invoicing -->
+    <section class="tour-step tour-step-alt" id="invoicing">
+      <div class="container tour-step-grid tour-step-reverse">
+        <div class="tour-step-content">
+          <span class="tour-step-num">02</span>
+          <h2>Invoice customers and get paid</h2>
+          <p>Create professional invoices with line items, inventory products, and automatic tax. Export PDFs, email from your client, and record payments when money arrives.</p>
+          <ul class="tour-bullets">
+            <li>Searchable customer picker — add customers inline</li>
+            <li>Multi-line invoices with inventory items and sales prices</li>
+            <li>Default due dates (Net 15, Net 30, etc.) from company settings</li>
+            <li>Batch invoicing for multiple customers at once</li>
+            <li>Track partial payments and open balances</li>
+          </ul>
+        </div>
+        <div class="tour-mock" aria-hidden="true">
+          <div class="mock-panel">
+            <div class="mock-panel-header">New Invoice</div>
+            <div class="mock-form-row">
+              <span class="mock-field-label">Customer</span>
+              <div class="mock-input mock-input-sm">Acme Corp ▾</div>
+            </div>
+            <div class="mock-form-row mock-form-row-2">
+              <div><span class="mock-field-label">Date</span><div class="mock-input mock-input-sm">2026-08-04</div></div>
+              <div><span class="mock-field-label">Due</span><div class="mock-input mock-input-sm">2026-09-03</div></div>
+            </div>
+            <div class="mock-table-mini cols-2">
+              <div class="mock-table-mini-head"><span>Description</span><span>Amount</span></div>
+              <div class="mock-table-mini-row"><span>Consulting — Aug</span><span>$2,450</span></div>
+              <div class="mock-table-mini-row"><span>Tax (8.25%)</span><span>$202</span></div>
+              <div class="mock-table-mini-foot"><span>Total</span><span>$2,652</span></div>
+            </div>
+            <div class="mock-btn-row">
+              <div class="mock-btn mock-btn-sm">Save Invoice</div>
+              <div class="mock-btn mock-btn-sm mock-btn-outline">Export PDF</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3: Banking -->
+    <section class="tour-step" id="banking">
+      <div class="container tour-step-grid">
+        <div class="tour-step-content">
+          <span class="tour-step-num">03</span>
+          <h2>Import and categorize bank activity</h2>
+          <p>Bring in transactions from CSV, OFX, or QIF exports. LedgerLocal suggests categories using your rules, fuzzy matching, and on-device learning — then you review and approve before anything posts.</p>
+          <ul class="tour-bullets">
+            <li>Never auto-posts without your approval</li>
+            <li>Create rules: “description contains STARBUCKS → Meals”</li>
+            <li>Bulk approve or skip transactions</li>
+            <li>Reconcile against bank statements monthly</li>
+          </ul>
+        </div>
+        <div class="tour-mock" aria-hidden="true">
+          <div class="mock-panel">
+            <div class="mock-panel-header">Banking &amp; Import</div>
+            <div class="mock-import-bar">
+              <span>12 transactions imported</span>
+              <div class="mock-btn mock-btn-sm">Approve Selected</div>
+            </div>
+            <div class="mock-table-mini">
+              <div class="mock-table-mini-head"><span>Description</span><span>Category</span><span>Amt</span></div>
+              <div class="mock-table-mini-row mock-row-check"><span>☑ STARBUCKS #4421</span><span>Meals</span><span class="expense">-$4.75</span></div>
+              <div class="mock-table-mini-row mock-row-check"><span>☑ ACME PAYMENT</span><span>Deposit</span><span class="income">+$2,450</span></div>
+              <div class="mock-table-mini-row"><span>☐ OFFICE DEPOT</span><span>Supplies</span><span class="expense">-$89</span></div>
+            </div>
+            <p class="mock-hint">Suggested category · rule match</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4: Payables -->
+    <section class="tour-step tour-step-alt" id="payables">
+      <div class="container tour-step-grid tour-step-reverse">
+        <div class="tour-step-content">
+          <span class="tour-step-num">04</span>
+          <h2>Track bills, expenses, and vendors</h2>
+          <p>Enter vendor bills, record everyday expenses, and pay from your bank or credit card accounts. Full accounts payable alongside your sales workflow.</p>
+          <ul class="tour-bullets">
+            <li>Bills with vendor tracking and payment history</li>
+            <li>Quick expense entry with category and pay-from account</li>
+            <li>Vendor list for faster data entry</li>
+            <li>Double-entry journal entries created automatically</li>
+          </ul>
+        </div>
+        <div class="tour-mock" aria-hidden="true">
+          <div class="mock-panel">
+            <div class="mock-panel-header">Enter Bill</div>
+            <div class="mock-form-row">
+              <span class="mock-field-label">Vendor</span>
+              <div class="mock-input mock-input-sm">Northwind Supplies ▾</div>
+            </div>
+            <div class="mock-form-row mock-form-row-2">
+              <div><span class="mock-field-label">Bill #</span><div class="mock-input mock-input-sm">BILL-1042</div></div>
+              <div><span class="mock-field-label">Amount</span><div class="mock-input mock-input-sm">$340.00</div></div>
+            </div>
+            <div class="mock-status-row">
+              <span class="mock-badge mock-badge-warn">Open</span>
+              <div class="mock-btn mock-btn-sm">Pay Bill</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 5: Reports -->
+    <section class="tour-step" id="reports">
+      <div class="container tour-step-grid">
+        <div class="tour-step-content">
+          <span class="tour-step-num">05</span>
+          <h2>Run reports you can trust</h2>
+          <p>Profit &amp; Loss, Balance Sheet, Trial Balance, cash flow, and AR/AP aging — on cash or accrual basis. Drill into any account to see the transactions behind the numbers.</p>
+          <ul class="tour-bullets">
+            <li>Toggle cash vs accrual on any report</li>
+            <li>Year-to-date dashboard at a glance</li>
+            <li>Drill-down from P&amp;L line items to journal detail</li>
+            <li>Aging reports for receivables and payables</li>
+          </ul>
+        </div>
+        <div class="tour-mock" aria-hidden="true">
+          <div class="mock-panel">
+            <div class="mock-panel-header">Profit &amp; Loss · Cash basis</div>
+            <p class="mock-subhead">Jan 1 – Dec 31, 2026</p>
+            <div class="mock-report-section">
+              <p class="mock-report-label">Income</p>
+              <div class="mock-report-line"><span>Sales Revenue</span><span class="income">$62,100</span></div>
+              <div class="mock-report-line"><span>Service Revenue</span><span class="income">$8,400</span></div>
+            </div>
+            <div class="mock-report-section">
+              <p class="mock-report-label">Expenses</p>
+              <div class="mock-report-line"><span>Office Supplies</span><span class="expense">$1,240</span></div>
+              <div class="mock-report-line"><span>Rent</span><span class="expense">$18,000</span></div>
+            </div>
+            <div class="mock-report-total"><span>Net Income</span><span>$18,420</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 6: Backup -->
+    <section class="tour-step tour-step-alt" id="backup">
+      <div class="container tour-step-grid tour-step-reverse">
+        <div class="tour-step-content">
+          <span class="tour-step-num">06</span>
+          <h2>Own, back up, and share your data</h2>
+          <p>Your entire business lives in one local file. Back it up to a USB drive or cloud folder you control. Send an encrypted package to your accountant without granting cloud access.</p>
+          <ul class="tour-bullets">
+            <li>One-click backup and restore</li>
+            <li>Encrypted accountant export (.llx) — read-only for CPAs</li>
+            <li>Multi-company: switch files without reinstalling</li>
+            <li>Inventory tracking and payroll calculator (Pro tier)</li>
+          </ul>
+        </div>
+        <div class="tour-mock" aria-hidden="true">
+          <div class="mock-panel">
+            <div class="mock-panel-header">Settings</div>
+            <div class="mock-settings-group">
+              <p class="mock-settings-title">Backup &amp; Restore</p>
+              <p class="mock-settings-desc">Your company file is stored locally.</p>
+              <div class="mock-btn-row">
+                <div class="mock-btn mock-btn-sm">Backup Company File</div>
+                <div class="mock-btn mock-btn-sm mock-btn-outline">Restore</div>
+              </div>
+            </div>
+            <div class="mock-settings-group">
+              <p class="mock-settings-title">Accountant Export</p>
+              <p class="mock-settings-desc">Encrypted read-only package for your CPA.</p>
+              <div class="mock-btn mock-btn-sm">Create Export</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature summary -->
+    <section class="section tour-summary">
+      <div class="container">
+        <div class="section-header">
+          <h2>Everything in one desktop app</h2>
+          <p>LedgerLocal covers the full small-business bookkeeping workflow — without a subscription.</p>
+        </div>
+        <div class="tour-feature-matrix">
+          <div class="tour-matrix-item"><strong>Sales</strong><span>Invoices, payments, PDF export, batch billing</span></div>
+          <div class="tour-matrix-item"><strong>Expenses</strong><span>Quick entry, vendors, categories</span></div>
+          <div class="tour-matrix-item"><strong>Bills</strong><span>Accounts payable, bill payments</span></div>
+          <div class="tour-matrix-item"><strong>Banking</strong><span>CSV/OFX/QIF import, rules, reconciliation</span></div>
+          <div class="tour-matrix-item"><strong>Accounts</strong><span>Chart of accounts, bank account setup</span></div>
+          <div class="tour-matrix-item"><strong>Reports</strong><span>P&amp;L, BS, TB, cash flow, aging, drill-down</span></div>
+          <div class="tour-matrix-item"><strong>Inventory</strong><span>Items, quantities, sales prices</span></div>
+          <div class="tour-matrix-item"><strong>Payroll</strong><span>Employee setup, withholding calculator</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="container">
+        <div class="cta-card">
+          <p class="coming-soon-label">Coming soon</p>
+          <h2>Ready to try it yourself?</h2>
+          <p>Join the waitlist and we'll let you know when LedgerLocal is ready for Windows.</p>
+          <div class="hero-actions">
+            <a href="index.html#notify" class="btn btn-white">Join the waitlist</a>
+            <a href="index.html#pricing" class="btn btn-secondary" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.25);">View pricing</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <p>&copy; 2026 LedgerLocal. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="onboarding.html">Product tour</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#pricing">Pricing</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="mailto:hello@ledgerlocal.app">Contact</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    const nav = document.getElementById('nav');
+    const navToggle = document.getElementById('nav-toggle');
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 8);
+    }, { passive: true });
+
+    navToggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    nav.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    const tourSections = document.querySelectorAll('.tour-step[id]');
+    const jumpLinks = document.querySelectorAll('.tour-jump a');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const id = entry.target.id;
+          jumpLinks.forEach((link) => {
+            link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`);
+          });
+        });
+      },
+      { rootMargin: '-40% 0px -50% 0px', threshold: 0 },
+    );
+
+    tourSections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

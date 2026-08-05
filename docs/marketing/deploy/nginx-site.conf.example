@@ -1,0 +1,62 @@
+# LedgerLocal marketing site — copy to /etc/nginx/sites-available/ledgerlocal
+# Then: sudo ln -s /etc/nginx/sites-available/ledgerlocal /etc/nginx/sites-enabled/
+#       sudo nginx -t && sudo systemctl reload nginx
+#
+# Replace:
+#   YOUR_DOMAIN     e.g. ledgerlocal.app or www.ledgerlocal.app
+#   REPO_PATH       e.g. /var/www/ledgerlocal/repo/docs/marketing
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name YOUR_DOMAIN;
+
+    # Redirect HTTP → HTTPS (uncomment after certbot)
+    # return 301 https://$host$request_uri;
+}
+
+server {
+    # Uncomment after: sudo certbot --nginx -d YOUR_DOMAIN
+    # listen 443 ssl http2;
+    # listen [::]:443 ssl http2;
+    # server_name YOUR_DOMAIN;
+    #
+    # ssl_certificate     /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem;
+
+    listen 80;
+    listen [::]:80;
+    server_name YOUR_DOMAIN;
+
+    root REPO_PATH/docs/marketing;
+    index index.html;
+
+    # Static marketing site (index.html + onboarding.html + styles.css)
+    location / {
+        try_files $uri $uri/ $uri.html =404;
+    }
+
+    # Cache static assets; HTML revalidates on deploy (git pull)
+    location ~* \.(css|js|ico|png|jpg|jpeg|gif|webp|svg|woff2?)$ {
+        expires 7d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location = /index.html {
+        expires -1;
+        add_header Cache-Control "no-cache";
+    }
+
+    location = /onboarding.html {
+        expires -1;
+        add_header Cache-Control "no-cache";
+    }
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    access_log /var/log/nginx/ledgerlocal-access.log;
+    error_log  /var/log/nginx/ledgerlocal-error.log;
+}

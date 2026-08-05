@@ -1,0 +1,21 @@
+# Ledger service dependencies
+# Core (Phase 0-1)
+# No external deps required for core - uses stdlib sqlite3
+
+# Phase 2 - file import
+ofxparse>=0.21
+quiffen>=0.9.5
+
+# Invoicing - PDF export
+reportlab>=4.2.0
+
+# Phase 3 - ML categorization
+scikit-learn>=1.5.0
+numpy>=1.26.0
+
+# Phase 4 - licensing JWT validation
+PyJWT>=2.9.0
+cryptography>=43.0.0
+
+# Dev / test
+pytest>=8.3.0
