@@ -112,3 +112,4 @@ See **activeContext.md → To-Dos — Next Session** (source of truth for backlo
 - [x] `docs/marketing/DEPLOY.md` — VPS setup for **branch-root** serving (not `docs/marketing/` path)
 - [x] GitHub Action: publish flat site to `gh-pages` branch root, then VPS `git pull`
 - [x] `deploy/deploy.sh`, `nginx-site.conf.example` updated for branch root
+- [x] Marketing contact email updated to `info@bytesbyblinken.com`
