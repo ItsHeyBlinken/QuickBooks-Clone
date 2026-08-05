@@ -1,0 +1,36 @@
+# Deploy docs/marketing to VPS on push to main.
+#
+# Required GitHub repository secrets:
+#   VPS_HOST          — hostname or IP
+#   VPS_USER          — SSH user (e.g. deploy)
+#   VPS_SSH_KEY       — private key (PEM) for that user
+#
+# Optional repository variables (Settings → Secrets and variables → Actions):
+#   VPS_DEPLOY_PATH   — repo path on server (default: /var/www/ledgerlocal/repo)
+#   VPS_DEPLOY_BRANCH — branch to deploy (default: main)
+
+name: Deploy marketing site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/marketing/**'
+      - '.github/workflows/deploy-marketing.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script_stop: true
+          script: |
+            export DEPLOY_REPO_DIR="${{ vars.VPS_DEPLOY_PATH || '/var/www/ledgerlocal/repo' }}"
+            export DEPLOY_BRANCH="${{ vars.VPS_DEPLOY_BRANCH || 'main' }}"
+            bash "$DEPLOY_REPO_DIR/docs/marketing/deploy/deploy.sh"

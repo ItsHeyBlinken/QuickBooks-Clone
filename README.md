@@ -41,3 +41,9 @@ Each company is a single `.ledger` SQLite file. Backup = copy the file.
 - Phase 2: AP/bills, reconciliation, batch invoicing, OFX/QIF, accrual toggle, aging reports
 - Phase 3: Drill-down reports, FTS5/ML import, accountant export, inventory, payroll calc
 - Phase 4: Licensing, feature gates, electron-builder config, marketing site, updater hooks
+
+## Marketing site (VPS)
+
+Static site in `docs/marketing/`. Local preview: `npm run marketing:preview`
+
+Deploy from GitHub: see **[docs/marketing/DEPLOY.md](docs/marketing/DEPLOY.md)** — nginx + `git pull` on VPS, optional GitHub Actions on push to `main`.

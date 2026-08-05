@@ -103,3 +103,13 @@ See **activeContext.md → To-Dos — Next Session** (source of truth for backlo
 - [x] CSS UI mocks per workflow step; sticky jump nav with scroll highlighting
 - [x] Feature matrix summary + waitlist CTA
 - [x] Linked from `index.html` nav, hero, and footer ("Product tour")
+
+---
+
+## Session: 2026-08-04 (continued) — VPS marketing deploy
+
+### Completed
+- [x] `docs/marketing/DEPLOY.md` — full VPS setup guide (nginx, clone, HTTPS, GitHub Actions)
+- [x] `docs/marketing/deploy/deploy.sh` — `git pull` + nginx reload
+- [x] `docs/marketing/deploy/nginx-site.conf.example`
+- [x] `.github/workflows/deploy-marketing.yml` — auto-deploy on push to `main` when `docs/marketing/**` changes

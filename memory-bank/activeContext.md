@@ -73,10 +73,10 @@ cd apps/desktop && npm run typecheck
 - [ ] **Settings → export:** period start/end for accountant export (`export.create` params)
 
 ### Marketing & launch
-- [ ] Deploy `docs/marketing/` to static host (Netlify, GitHub Pages, etc.)
-- [ ] Replace mailto waitlist with real email capture (Formspree, Buttondown, etc.) when domain/email ready
-- [ ] Swap Coming Soon CTAs to download links when Windows build is signed and hosted
-- [ ] Update `hello@ledgerlocal.app` to real contact address if different
+- [x] VPS deploy kit: `docs/marketing/DEPLOY.md`, `deploy/deploy.sh`, nginx example, GitHub Actions workflow
+- [ ] Configure VPS (clone repo, nginx, DNS, certbot) — see DEPLOY.md
+- [ ] Add GitHub secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
+- [ ] Replace mailto waitlist with real email capture when domain/email ready
 
 ### Larger / later
 - [ ] Journal viewer + void UI (`journal.list` filters, `journal.void`)
