@@ -47,6 +47,7 @@ cd services/ledger && python -m pytest
 - Code signing: EV cert (Windows), Apple Developer ID (macOS)
 
 ## Marketing site (VPS)
-- Static files: `docs/marketing/` (served by nginx from cloned repo)
-- Deploy: `docs/marketing/deploy/deploy.sh` or GitHub Actions `deploy-marketing.yml`
+- Source: `docs/marketing/` on `main`
+- Publish: GitHub Action flattens to deploy branch root (`gh-pages` default)
+- VPS: nginx `root` = git clone root on deploy branch; `git pull` to deploy
 - Docs: `docs/marketing/DEPLOY.md`

@@ -1,13 +1,18 @@
-# Deploy docs/marketing to VPS on push to main.
+# Publish marketing site to a deploy branch (flat files at branch root), then pull on VPS.
 #
-# Required GitHub repository secrets:
-#   VPS_HOST          — hostname or IP
-#   VPS_USER          — SSH user (e.g. deploy)
-#   VPS_SSH_KEY       — private key (PEM) for that user
+# Flow:
+#   1. main — source lives in docs/marketing/
+#   2. publish job — copies site files to gh-pages branch root (index.html at /)
+#   3. deploy job — VPS git pull on that branch; nginx root = repo clone root
 #
-# Optional repository variables (Settings → Secrets and variables → Actions):
-#   VPS_DEPLOY_PATH   — repo path on server (default: /var/www/ledgerlocal/repo)
-#   VPS_DEPLOY_BRANCH — branch to deploy (default: main)
+# Publish job: uses GITHUB_TOKEN (no extra secrets).
+#
+# Deploy job — repository secrets:
+#   VPS_HOST, VPS_USER, VPS_SSH_KEY
+#
+# Optional repository variables:
+#   VPS_DEPLOY_PATH    — clone path on server (default: /var/www/ledgerlocal/repo)
+#   VPS_DEPLOY_BRANCH  — branch nginx serves (default: gh-pages)
 
 name: Deploy marketing site
 
@@ -19,11 +24,37 @@ on:
       - '.github/workflows/deploy-marketing.yml'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  deploy:
+  publish:
+    name: Publish to deploy branch
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
+      - uses: actions/checkout@v4
+
+      - name: Prepare static site (branch root layout)
+        run: |
+          mkdir -p _site
+          cp docs/marketing/index.html _site/
+          cp docs/marketing/onboarding.html _site/
+          cp docs/marketing/styles.css _site/
+
+      - name: Push to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: ${{ vars.VPS_DEPLOY_BRANCH || 'gh-pages' }}
+          force_orphan: false
+
+  deploy:
+    name: Pull on VPS
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull deploy branch on VPS
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -32,5 +63,15 @@ jobs:
           script_stop: true
           script: |
             export DEPLOY_REPO_DIR="${{ vars.VPS_DEPLOY_PATH || '/var/www/ledgerlocal/repo' }}"
-            export DEPLOY_BRANCH="${{ vars.VPS_DEPLOY_BRANCH || 'main' }}"
-            bash "$DEPLOY_REPO_DIR/docs/marketing/deploy/deploy.sh"
+            export DEPLOY_BRANCH="${{ vars.VPS_DEPLOY_BRANCH || 'gh-pages' }}"
+            cd "$DEPLOY_REPO_DIR"
+            git fetch origin "$DEPLOY_BRANCH"
+            git checkout "$DEPLOY_BRANCH"
+            git pull --ff-only origin "$DEPLOY_BRANCH"
+            if [[ ! -f index.html ]]; then
+              echo "Error: index.html not found at branch root." >&2
+              exit 1
+            fi
+            if sudo nginx -t; then
+              sudo systemctl reload nginx
+            fi

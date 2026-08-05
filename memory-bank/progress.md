@@ -109,7 +109,6 @@ See **activeContext.md → To-Dos — Next Session** (source of truth for backlo
 ## Session: 2026-08-04 (continued) — VPS marketing deploy
 
 ### Completed
-- [x] `docs/marketing/DEPLOY.md` — full VPS setup guide (nginx, clone, HTTPS, GitHub Actions)
-- [x] `docs/marketing/deploy/deploy.sh` — `git pull` + nginx reload
-- [x] `docs/marketing/deploy/nginx-site.conf.example`
-- [x] `.github/workflows/deploy-marketing.yml` — auto-deploy on push to `main` when `docs/marketing/**` changes
+- [x] `docs/marketing/DEPLOY.md` — VPS setup for **branch-root** serving (not `docs/marketing/` path)
+- [x] GitHub Action: publish flat site to `gh-pages` branch root, then VPS `git pull`
+- [x] `deploy/deploy.sh`, `nginx-site.conf.example` updated for branch root

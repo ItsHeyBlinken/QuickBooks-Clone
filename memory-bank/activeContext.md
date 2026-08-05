@@ -73,8 +73,8 @@ cd apps/desktop && npm run typecheck
 - [ ] **Settings → export:** period start/end for accountant export (`export.create` params)
 
 ### Marketing & launch
-- [x] VPS deploy kit: `docs/marketing/DEPLOY.md`, `deploy/deploy.sh`, nginx example, GitHub Actions workflow
-- [ ] Configure VPS (clone repo, nginx, DNS, certbot) — see DEPLOY.md
+- [x] VPS deploy kit aligned to **branch-root** serving (`gh-pages` publish + nginx clone root)
+- [ ] Configure VPS: clone, checkout deploy branch, nginx `root` = repo path (see DEPLOY.md)
 - [ ] Add GitHub secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
 - [ ] Replace mailto waitlist with real email capture when domain/email ready
 

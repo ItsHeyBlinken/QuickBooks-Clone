@@ -46,4 +46,4 @@ Each company is a single `.ledger` SQLite file. Backup = copy the file.
 
 Static site in `docs/marketing/`. Local preview: `npm run marketing:preview`
 
-Deploy from GitHub: see **[docs/marketing/DEPLOY.md](docs/marketing/DEPLOY.md)** — nginx + `git pull` on VPS, optional GitHub Actions on push to `main`.
+Deploy from GitHub: see **[docs/marketing/DEPLOY.md](docs/marketing/DEPLOY.md)** — source on `main` in `docs/marketing/`; published flat to `gh-pages` branch root; VPS nginx serves clone root.

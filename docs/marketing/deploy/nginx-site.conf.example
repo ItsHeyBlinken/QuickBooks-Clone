@@ -1,10 +1,7 @@
 # LedgerLocal marketing site — copy to /etc/nginx/sites-available/ledgerlocal
-# Then: sudo ln -s /etc/nginx/sites-available/ledgerlocal /etc/nginx/sites-enabled/
-#       sudo nginx -t && sudo systemctl reload nginx
 #
-# Replace:
-#   YOUR_DOMAIN     e.g. ledgerlocal.app or www.ledgerlocal.app
-#   REPO_PATH       e.g. /var/www/ledgerlocal/repo/docs/marketing
+# Serves the deploy branch root (e.g. gh-pages) where index.html lives at /.
+# Replace YOUR_DOMAIN and REPO_PATH (clone root, not docs/marketing).
 
 server {
     listen 80;
@@ -28,15 +25,13 @@ server {
     listen [::]:80;
     server_name YOUR_DOMAIN;
 
-    root REPO_PATH/docs/marketing;
+    root REPO_PATH;
     index index.html;
 
-    # Static marketing site (index.html + onboarding.html + styles.css)
     location / {
         try_files $uri $uri/ $uri.html =404;
     }
 
-    # Cache static assets; HTML revalidates on deploy (git pull)
     location ~* \.(css|js|ico|png|jpg|jpeg|gif|webp|svg|woff2?)$ {
         expires 7d;
         add_header Cache-Control "public, immutable";
@@ -52,7 +47,6 @@ server {
         add_header Cache-Control "no-cache";
     }
 
-    # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;

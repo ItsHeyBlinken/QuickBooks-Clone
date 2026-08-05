@@ -1,178 +1,175 @@
 # Hosting LedgerLocal marketing site on a VPS (from GitHub)
 
-The marketing site is static HTML in this folder. Nginx serves files directly from the cloned repo — deploys are a `git pull`.
+## How it works
 
-**Pages:** `index.html` (landing), `onboarding.html` (product tour), `styles.css`
+| Location | What |
+|----------|------|
+| **`main` branch** | Source files in `docs/marketing/` (edit here) |
+| **Deploy branch** (`gh-pages` by default) | Flat static site at **branch root** — `index.html`, `onboarding.html`, `styles.css` |
+| **VPS** | Clone repo, checkout deploy branch, nginx `root` = clone directory |
+
+Push to `main` → GitHub Actions copies site files to the deploy branch root → VPS `git pull` (manual or via Actions SSH).
 
 ---
 
 ## 1. One-time VPS setup
 
-SSH into your VPS as a user with `sudo` (Ubuntu/Debian examples).
-
-### Install nginx
+### Install nginx and clone
 
 ```bash
 sudo apt update
 sudo apt install -y nginx git
-```
-
-### Clone the repository
-
-```bash
 sudo mkdir -p /var/www/ledgerlocal
 sudo chown "$USER:$USER" /var/www/ledgerlocal
 cd /var/www/ledgerlocal
 git clone https://github.com/YOUR_USER/YOUR_REPO.git repo
 cd repo
-git checkout main
+git checkout gh-pages
 ```
 
-Use SSH clone URL if the repo is private:
+If `gh-pages` does not exist yet, push marketing changes to `main` first so the GitHub Action creates it, then:
 
 ```bash
-git clone git@github.com:YOUR_USER/YOUR_REPO.git repo
+git fetch origin gh-pages
+git checkout gh-pages
 ```
 
-### Configure nginx
+### Configure nginx (branch root)
 
 ```bash
-sudo cp /var/www/ledgerlocal/repo/docs/marketing/deploy/nginx-site.conf.example \
-  /etc/nginx/sites-available/ledgerlocal
+# Copy from main if deploy branch has no deploy/ folder yet:
+git fetch origin main
+git show origin/main:docs/marketing/deploy/nginx-site.conf.example | sudo tee /etc/nginx/sites-available/ledgerlocal
 ```
 
-Edit the file and replace:
+Edit `/etc/nginx/sites-available/ledgerlocal`:
 
-- `YOUR_DOMAIN` → your domain (e.g. `ledgerlocal.app`)
-- `REPO_PATH` → `/var/www/ledgerlocal/repo` (nginx `root` becomes `.../repo/docs/marketing`)
+- `YOUR_DOMAIN` → your domain
+- `REPO_PATH` → `/var/www/ledgerlocal/repo` (clone root — **not** `docs/marketing`)
 
 ```bash
 sudo ln -sf /etc/nginx/sites-available/ledgerlocal /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default   # optional, if unused
-sudo nginx -t
-sudo systemctl reload nginx
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
-Point DNS **A record** for your domain to the VPS IP.
+### Install deploy script (lives outside deploy branch)
 
-### HTTPS (recommended)
+```bash
+git fetch origin main
+git show origin/main:docs/marketing/deploy/deploy.sh > /var/www/ledgerlocal/deploy.sh
+chmod +x /var/www/ledgerlocal/deploy.sh
+```
+
+### HTTPS
 
 ```bash
 sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d YOUR_DOMAIN
 ```
 
-Then uncomment the SSL `server` block in the nginx config (and the HTTP→HTTPS redirect) per comments in `deploy/nginx-site.conf.example`.
-
-### Make deploy script executable
-
-```bash
-chmod +x /var/www/ledgerlocal/repo/docs/marketing/deploy/deploy.sh
-```
-
 ---
 
-## 2. Deploy workflow (git pull)
+## 2. Deploy workflow
 
-### Option A — GitHub Actions (recommended)
+### Automatic (GitHub Actions)
 
-On every push to `main` that touches `docs/marketing/`, the workflow runs `deploy.sh` on your VPS.
+On push to `main` when `docs/marketing/**` changes:
 
-**Add repository secrets** (GitHub → Settings → Secrets and variables → Actions):
+1. **Publish** — copies `index.html`, `onboarding.html`, `styles.css` to deploy branch root
+2. **Deploy** — SSH to VPS, `git pull` on deploy branch, reload nginx
 
-| Secret        | Value                          |
-|---------------|--------------------------------|
-| `VPS_HOST`    | VPS IP or hostname             |
-| `VPS_USER`    | SSH user (e.g. `deploy`)       |
-| `VPS_SSH_KEY` | Private SSH key for that user  |
+**Secrets** (Settings → Secrets and variables → Actions):
 
-**Optional variables** (Settings → Secrets and variables → Actions → Variables):
+| Secret | Value |
+|--------|--------|
+| `VPS_HOST` | VPS IP or hostname |
+| `VPS_USER` | SSH user |
+| `VPS_SSH_KEY` | Private SSH key |
 
-| Variable           | Default                      |
-|--------------------|------------------------------|
-| `VPS_DEPLOY_PATH`  | `/var/www/ledgerlocal/repo`  |
-| `VPS_DEPLOY_BRANCH`| `main`                       |
+**Optional variables:**
 
-**VPS: dedicated deploy user** (run once on server):
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `VPS_DEPLOY_PATH` | `/var/www/ledgerlocal/repo` | Clone path on VPS |
+| `VPS_DEPLOY_BRANCH` | `gh-pages` | Branch nginx serves |
 
-```bash
-sudo adduser deploy
-sudo usermod -aG www-data deploy
+The publish job runs without VPS secrets. The deploy job needs secrets; if they are missing, publish still updates the branch and you can pull manually.
 
-# As your admin user — allow deploy to pull repo and reload nginx
-sudo chown -R deploy:deploy /var/www/ledgerlocal/repo
-
-# Passwordless nginx reload for deploy user
-echo 'deploy ALL=(ALL) NOPASSWD: /usr/sbin/nginx, /bin/systemctl reload nginx' | sudo tee /etc/sudoers.d/ledgerlocal-deploy
-```
-
-Add the **public** key to `/home/deploy/.ssh/authorized_keys`. Put the **private** key in GitHub secret `VPS_SSH_KEY`.
-
-**Test deploy manually:**
+### Manual deploy on VPS
 
 ```bash
-ssh deploy@YOUR_VPS 'bash /var/www/ledgerlocal/repo/docs/marketing/deploy/deploy.sh'
-```
-
-**Trigger from GitHub:** push to `main`, or Actions → “Deploy marketing site” → Run workflow.
-
-### Option B — Manual deploy
-
-After merging to `main`:
-
-```bash
-ssh your-user@YOUR_VPS
-bash /var/www/ledgerlocal/repo/docs/marketing/deploy/deploy.sh
+/var/www/ledgerlocal/deploy.sh
 ```
 
 Or:
 
 ```bash
-cd /var/www/ledgerlocal/repo && git pull origin main && sudo systemctl reload nginx
+cd /var/www/ledgerlocal/repo
+git fetch origin gh-pages
+git checkout gh-pages
+git pull --ff-only origin gh-pages
+sudo systemctl reload nginx
 ```
-
-### Option C — GitHub webhook + cron (alternative)
-
-If you prefer not to use Actions, a webhook listener or a cron job can run `deploy.sh` when notified. Option A is simpler for most setups.
 
 ---
 
-## 3. Verify
+## 3. Local development
 
-- https://YOUR_DOMAIN/ → landing page  
-- https://YOUR_DOMAIN/onboarding.html → product tour  
-
-Local preview before push:
+Edit files in `docs/marketing/` on `main`. Preview locally:
 
 ```bash
 npm run marketing:preview
 # http://localhost:4173
 ```
 
----
-
-## 4. Troubleshooting
-
-| Issue | Check |
-|-------|--------|
-| 404 on `/onboarding.html` | `root` in nginx must be `.../repo/docs/marketing` |
-| Permission denied on `git pull` | Repo owned by deploy user; SSH key has read access to GitHub |
-| Actions deploy fails | Secrets correct; deploy user can `sudo nginx -t` and `reload` |
-| Stale CSS after deploy | Hard refresh; HTML has `no-cache` headers in nginx example |
+Commit and push to `main` — Actions publishes to deploy branch.
 
 ---
 
-## File layout on VPS
+## 4. Verify
 
-```
-/var/www/ledgerlocal/repo/          ← git clone (entire monorepo)
-  docs/marketing/
-    index.html                      ← nginx document root
-    onboarding.html
-    styles.css
-    deploy/
-      deploy.sh
-      nginx-site.conf.example
+- `https://YOUR_DOMAIN/` → landing page
+- `https://YOUR_DOMAIN/onboarding.html` → product tour
+
+On the server:
+
+```bash
+ls /var/www/ledgerlocal/repo/index.html   # must exist at branch root
 ```
 
-Nginx serves **only** `docs/marketing/` — the rest of the repo is not exposed unless you misconfigure `root`.
+---
+
+## 5. Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| 404 on `/` | nginx `root` must be clone root on **deploy branch**, not `docs/marketing` |
+| `gh-pages` branch missing | Push to `main` once to run publish job |
+| VPS still on `main` | `git checkout gh-pages && git pull` |
+| Deploy job fails, publish OK | Add VPS secrets, or run `deploy.sh` manually |
+| Wrong branch name | Set `VPS_DEPLOY_BRANCH` variable to match your branch |
+
+---
+
+## Layout
+
+**`main` (development)**
+
+```
+docs/marketing/
+  index.html
+  onboarding.html
+  styles.css
+  deploy/          ← not published to site branch
+    deploy.sh
+    nginx-site.conf.example
+```
+
+**Deploy branch (`gh-pages`) — what nginx serves**
+
+```
+/var/www/ledgerlocal/repo/
+  index.html
+  onboarding.html
+  styles.css
+```
